@@ -365,10 +365,6 @@ body {
   opacity: 0;
   z-index: -1;
   transition: opacity var(--tr-duration-short) var(--tr-easing-linear);
-  -webkit-transition: opacity var(--tr-duration-short) var(--tr-easing-linear);
-  -moz-transition: opacity var(--tr-duration-short) var(--tr-easing-linear);
-  -ms-transition: opacity var(--tr-duration-short) var(--tr-easing-linear);
-  -o-transition: opacity var(--tr-duration-short) var(--tr-easing-linear);
 }
 :has(> .state-layer):hover > .state-layer {
   opacity: 0.08;
@@ -410,11 +406,6 @@ body {
   opacity: 0;
   visibility: hidden;
   transition-property: opacity, visibility;
-  transition: var(--tr-duration-short) linear;
-  -webkit-transition: var(--tr-duration-short) linear;
-  -moz-transition: var(--tr-duration-short) linear;
-  -ms-transition: var(--tr-duration-short) linear;
-  -o-transition: var(--tr-duration-short) linear;
 }
 .overlay.active {
   opacity: 0.5;
@@ -449,6 +440,51 @@ body {
 /* * FAB (Floating Action Button) */
 
 /* * Card */
+.card {
+  background-color: var(--surface);
+  padding: var(--spacing-4);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  --state-layer-bg: var(--on-surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-large);
+  transition: border-color var(--tr-duration-short) var(--tr-easing-linear);
+}
+
+.card:where(:hover, :focus-visible) {
+  border-color: var(--outline);
+}
+.card .card-title {
+  color: var(--on-surface);
+}
+.card .card-text {
+  color: var(--on-surface-variant);
+  margin-block: var(--spacing-4);
+  text-wrap: balance;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.card .wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block-start: auto;
+}
+.card .card-time {
+  color: var(--on-surface-variant);
+}
+.card .icon-btn {
+  opacity: 0;
+  transition: opacity var(--tr-duration-short) var(--tr-easing-linear);
+}
+.card:where(:hover, :focus-visible) .icon-btn {
+  opacity: 1;
+}
 
 /* * Modal */
 
@@ -475,22 +511,10 @@ body {
   transition-property: visibility, transform;
   box-shadow: var(--shadow-3);
   border-radius: 0 var(--radius-large) var(--radius-large) 0;
-  -webkit-border-radius: 0 var(--radius-large) var(--radius-large) 0;
-  -moz-border-radius: 0 var(--radius-large) var(--radius-large) 0;
-  -ms-border-radius: 0 var(--radius-large) var(--radius-large) 0;
-  -o-border-radius: 0 var(--radius-large) var(--radius-large) 0;
-  -webkit-transition: var(--tr-duration-long) var(--tr-easing-emphasized);
-  -moz-transition: var(--tr-duration-long) var(--tr-easing-emphasized);
-  -ms-transition: var(--tr-duration-long) var(--tr-easing-emphasized);
-  -o-transition: var(--tr-duration-long) var(--tr-easing-emphasized);
 }
 .sidebar.active {
   visibility: visible;
   transform: translateX(100%);
-  -webkit-transform: translateX(100%);
-  -moz-transform: translateX(100%);
-  -ms-transform: translateX(100%);
-  -o-transform: translateX(100%);
 }
 .sidebar .fab {
   display: none;
@@ -542,10 +566,6 @@ body {
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--tr-duration-short) var(--tr-easing-linear);
-  -webkit-transition: opacity var(--tr-duration-short) var(--tr-easing-linear);
-  -moz-transition: opacity var(--tr-duration-short) var(--tr-easing-linear);
-  -ms-transition: opacity var(--tr-duration-short) var(--tr-easing-linear);
-  -o-transition: opacity var(--tr-duration-short) var(--tr-easing-linear);
 }
 .nav-item:where(:hover, :focus-within) .icon-btn {
   opacity: 1;
@@ -558,10 +578,6 @@ body {
   padding-inline: var(--spacing-4);
   color: var(--on-surface-variant);
   transition: color var(--tr-duration-short) var(--tr-easing-linear);
-  -webkit-transition: color var(--tr-duration-short) var(--tr-easing-linear);
-  -moz-transition: color var(--tr-duration-short) var(--tr-easing-linear);
-  -ms-transition: color var(--tr-duration-short) var(--tr-easing-linear);
-  -o-transition: color var(--tr-duration-short) var(--tr-easing-linear);
 }
 
 /* ?=== #MAIN === */
@@ -599,6 +615,14 @@ body {
 }
 .main > .title {
   margin-block: var(--spacing-3);
+}
+.note-list {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  align-content: flex-start;
+  align-items: stretch;
+  gap: var(--spacing-2);
 }
 
 /* ?=== #MEDIA QUERIES === */

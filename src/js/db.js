@@ -73,4 +73,15 @@ export const db = {
       return notebookData;
     },
   },
+  get: {
+    /**
+     * Retrieves all notebooks from the database.
+     * @function
+     * @returns {Array<Object>} An array of notebook objects.
+     */
+    notebook() {
+      readDB();
+      return noteKeeperDB.notebooks;
+    },
+  },
 };

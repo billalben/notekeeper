@@ -1,6 +1,6 @@
 "use strict";
 
-import { generateID } from "./utils.js";
+import { generateID, findNotebook } from "./utils.js";
 
 // DB Object
 let /** {Object} */ noteKeeperDB = {};
@@ -82,6 +82,26 @@ export const db = {
     notebook() {
       readDB();
       return noteKeeperDB.notebooks;
+    },
+  },
+  update: {
+    /**
+     * Updates the name of a notebook in the database.
+     *
+     * @function
+     * @param {string} notebookId - The ID of the notebook to update.
+     * @param {string} name - The new name for the notebook.
+     * @returns {Object} The updated notebook object.
+     */
+    notebook(notebookId, name) {
+      readDB();
+
+      const /** {Object} */ notebook = findNotebook(noteKeeperDB, notebookId);
+      notebook.name = name;
+
+      writeDB();
+
+      return notebook;
     },
   },
 };

@@ -10,6 +10,7 @@ import {
 import { Tooltip } from "./components/Tooltip.js";
 import { db } from "./db.js";
 import { client } from "./client.js";
+import { NoteModal } from "./components/Modal.js";
 
 const /** {HTMLElement} */ $sidebar = document.querySelector("[data-sidebar]");
 const /** {NodeList} */ $sidebarTogglers = document.querySelectorAll(
@@ -54,9 +55,7 @@ const /** {HTMLElement} */ $addNotebookBtn = document.querySelector(
 /**
  * Shows a notebook creation field in the sidebar when the "Add Notebook" 
 button is clicked.
- * The function dynamically adds a new notebook field element, 
-makes it editable, and listens for the 'Enter' key 
-to create a new notebook when pressed.
+ * The function dynamically adds a new notebook field element, makes it editable, and listens for the 'Enter' key to create a new notebook when pressed.
  */
 
 const showNotebookField = () => {
@@ -105,12 +104,39 @@ const createNotebook = function (event) {
 };
 
 /**
-* Renders the existing notebook list by retrieving data from the
-database and passing it to the client.
-*/
+ * Renders the existing notebook list by retrieving data from the database and passing it to the client.
+ */
 const renderExitedNotebook = function () {
   const /** {Array} */ notebookList = db.get.notebook();
   client.notebook.read(notebookList);
 };
 
 renderExitedNotebook();
+
+/**
+ * Create new note
+ * Attaches event listeners to a collection of DOM elements representing "Create Note" buttons.
+ * When a button is clicked, it opens a modal for creating a new note and handles the submission
+ * of the new note to the database and client.
+ */
+
+const /** {NodeList} */ $noteCreateBtns = document.querySelectorAll(
+    "[data-note-create-btn]"
+  );
+
+addEventOnElements($noteCreateBtns, "click", function () {
+  // Create and open a new modal
+  const /** */ modal = NoteModal();
+  modal.open();
+
+  // Handle the submission of the new note to the database and client
+  modal.onSubmit((noteObj) => {
+    const /** string */ activeNotebookId = document.querySelector(
+        "[data-notebook].active"
+      ).dataset.notebook;
+
+    const /** {Object} */ noteData = db.post.note(activeNotebookId, noteObj);
+    client.note.create(noteData);
+    modal.close();
+  });
+});

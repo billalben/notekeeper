@@ -1,6 +1,6 @@
 "use strict";
 
-import { generateID, findNotebook } from "./utils.js";
+import { generateID, findNotebook, findNotebookIndex } from "./utils.js";
 
 // DB Object
 let /** {Object} */ noteKeeperDB = {};
@@ -72,7 +72,33 @@ export const db = {
 
       return notebookData;
     },
+
+    /**
+     * Adds a new note to a specified notebook in the database.
+     * @param {string} notebookId - The ID of the notebook to add the note to.
+     * @param {Object} object - The note object to add.
+     * @returns {Object} The newly created note object.
+     */
+    note(notebookId, object) {
+      readDB();
+
+      const /** {Object} */ notebook = findNotebook(noteKeeperDB, notebookId);
+
+      const /** {Object} */ noteData = {
+          id: generateID(),
+          notebookId,
+          ...object,
+          postedOn: new Date().getTime(),
+        };
+
+      notebook.notes.unshift(noteData);
+
+      writeDB();
+
+      return noteData;
+    },
   },
+
   get: {
     /**
      * Retrieves all notebooks from the database.
@@ -84,6 +110,7 @@ export const db = {
       return noteKeeperDB.notebooks;
     },
   },
+
   update: {
     /**
      * Updates the name of a notebook in the database.
@@ -102,6 +129,25 @@ export const db = {
       writeDB();
 
       return notebook;
+    },
+  },
+
+  delete: {
+    /**
+     * Delete a notebook from database.
+     * @param {string} notebookId - The ID of the notebook to delete.
+     */
+    notebook(notebookId) {
+      readDB();
+
+      const /** {Number} */ notebookIndex = findNotebookIndex(
+          noteKeeperDB,
+          notebookId
+        );
+
+      noteKeeperDB.notebooks.splice(notebookIndex, 1);
+
+      writeDB();
     },
   },
 };

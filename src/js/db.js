@@ -91,7 +91,7 @@ export const db = {
           postedOn: new Date().getTime(),
         };
 
-      notebook.notes.unshift(noteData);
+      notebook?.notes.unshift(noteData);
 
       writeDB();
 
@@ -108,6 +108,19 @@ export const db = {
     notebook() {
       readDB();
       return noteKeeperDB.notebooks;
+    },
+
+    /**
+     * Retrieves all notes within a specified notebook.
+     * @param {string} notebookId - The ID of the notebook to retrieve notes from.
+     * @returns {Array<Object>} - An array of note objects.
+     */
+    note(notebookId) {
+      readDB();
+
+      const /** {Object} */ notebook = findNotebook(noteKeeperDB, notebookId);
+
+      return notebook.notes;
     },
   },
 

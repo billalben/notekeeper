@@ -10,9 +10,33 @@ const /** {HTMLElement} */ $sidebarList = document.querySelector(
 const /** {HTMLElement} */ $notePanelTitle = document.querySelector(
     "[data-note-panel-title]"
   );
-
 const /** {HTMLElement} */ $notePanel =
     document.querySelector("[data-note-panel]");
+const /** {NoteList} */ $noteCreateBtns = document.querySelectorAll(
+    "[data-note-create-btn]"
+  );
+
+const /** {} */ emptyNoteTemplate = `
+    <div class="empty-notes">
+      <span class="material-symbols-rounded" aria-hidden="true">
+        note_stack
+      </span>
+      <div class="text-headline-small">No notes</div>
+    </div>
+  `;
+
+/**
+ * Enables or disables "Create Note" buttons based on whether there are any notebooks.
+ * @param {boolean} isThereAnyNotebook - Indicates whether there are any notebooks
+ */
+const disableNoteCreateBtns = function (isThereAnyNotebook) {
+  $noteCreateBtns.forEach(($item) => {
+    $item[isThereAnyNotebook ? "removeAttribute" : "setAttribute"](
+      "disabled",
+      ""
+    );
+  });
+};
 
 /**
  * The client object manages interactions with the user interface
@@ -37,6 +61,8 @@ export const client = {
       $sidebarList.appendChild($navItem);
       activeNotebook.call($navItem);
       $notePanelTitle.textContent = notebookData.name;
+      $notePanel.innerHTML = emptyNoteTemplate;
+      disableNoteCreateBtns(true);
     },
 
     /**
@@ -44,6 +70,8 @@ export const client = {
      * @param {Array<Object>} notebookList - List of notebook data to display.
      */
     read(notebookList) {
+      disableNoteCreateBtns(notebookList.length);
+
       notebookList?.forEach((notebookData, index) => {
         const /** {HTMLElement} */ $navItem = NavItem(
             notebookData.id,
@@ -94,7 +122,8 @@ export const client = {
       if ($activeNavItem) $activeNavItem.click();
       else {
         $notePanelTitle.innerHTML = "";
-        // $notePanel.innerHTML = "";
+        $notePanel.innerHTML = "";
+        disableNoteCreateBtns(false);
       }
 
       $deleteNotebook.remove();
@@ -107,9 +136,29 @@ export const client = {
      * @param {Object} noteData - Data representing the new note
      */
     create(noteData) {
+      // Clear 'emptyNotesTemplate' from 'notePanel' if there is no note exists
+      if (!$notePanel.querySelector("[data-note]")) $notePanel.innerHTML = "";
+
       // Append card in notePanel
       const /** {HTMLElement} */ $card = Card(noteData);
       $notePanel.appendChild($card);
+    },
+
+    /**
+     * Reads and display a list of notes in the UI.
+     * @param {Array<Object>} noteList - List of note data to display.
+     */
+    read(noteList) {
+      if (noteList.length) {
+        $notePanel.innerHTML = "";
+
+        noteList.forEach((noteData) => {
+          const /** {HTMLElement} */ $card = Card(noteData);
+          $notePanel.appendChild($card);
+        });
+      } else {
+        $notePanel.innerHTML = emptyNoteTemplate;
+      }
     },
   },
 };

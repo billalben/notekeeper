@@ -115,7 +115,9 @@ const getRelativeTime = function (milliSeconds) {
     ? `${minute} min ago`
     : hour < 24
     ? `${hour} hour ago`
-    : `${day} day ago`;
+    : day === 1
+    ? `${day} day ago`
+    : `${day} days ago`;
 };
 
 export {

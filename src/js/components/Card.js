@@ -2,6 +2,9 @@
 
 import { Tooltip } from "./Tooltip.js";
 import { getRelativeTime } from "../utils.js";
+import { NoteModal } from "./Modal.js";
+import { db } from "../db.js";
+import { client } from "../client.js";
 
 /**
  * Creates an HTML card element representing a note based on
@@ -38,6 +41,24 @@ export const Card = function (noteData) {
   `;
 
   Tooltip($card.querySelector("[data-tooltip]"));
+
+  $card.addEventListener("click", function () {
+    const /** {Object} */ modal = NoteModal(
+        title,
+        text,
+        getRelativeTime(postedOn)
+      );
+
+    modal.open();
+    modal.onSubmit(function (noteData) {
+      const updatedData = db.update.note(id, noteData);
+
+      // Update the note in the client UI
+      client.note.update(id, updatedData);
+
+      modal.close();
+    });
+  });
 
   return $card;
 };

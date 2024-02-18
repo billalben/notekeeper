@@ -2,7 +2,7 @@
 
 import { Tooltip } from "./Tooltip.js";
 import { getRelativeTime } from "../utils.js";
-import { NoteModal } from "./Modal.js";
+import { NoteModal, DeleteConfirmModel } from "./Modal.js";
 import { db } from "../db.js";
 import { client } from "../client.js";
 
@@ -30,6 +30,7 @@ export const Card = function (noteData) {
         class="icon-btn large"
         aria-label="Delete Note"
         data-tooltip="Delete Note"
+        data-delete-btn
       >
         <span class="material-symbols-rounded" aria-hidden="true">
           delete
@@ -55,6 +56,34 @@ export const Card = function (noteData) {
 
       // Update the note in the client UI
       client.note.update(id, updatedData);
+
+      modal.close();
+    });
+  });
+
+  /**
+   * Note delete functionality
+   * Attaches a click event listener to delete button element within card.
+   * When the delete button is clicked, it opens a confirmation modal for deleting the associated note.
+   * If the deletion is confirmed, it updates the UI and database to remove the note.
+   */
+  const /** {HTMLElement} */ $deleteBtn =
+      $card.querySelector("[data-delete-btn]");
+
+  $deleteBtn.addEventListener("click", function (event) {
+    event.stopPropagation();
+
+    const /** {object} */ modal = DeleteConfirmModel(title);
+
+    modal.open();
+
+    modal.onSubmit(function (isConfirm) {
+      if (isConfirm) {
+        const /** {Array} */ exitedNotes = db.delete.note(notebookId, id);
+
+        // Update the client UI to reflect note deletion
+        client.note.delete(id, exitedNotes.length);
+      }
 
       modal.close();
     });

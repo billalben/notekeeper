@@ -171,7 +171,17 @@ export const client = {
           `[data-note="${noteId}"]`
         );
       const /** {HTMLElement} */ $newCard = Card(noteData);
-      $notePanel.replaceChild($newCard, $oldCard)
+      $notePanel.replaceChild($newCard, $oldCard);
+    },
+
+    /**
+     * Delete a note card from the UI.
+     * @param {string} noteId - ID of the note to delete.
+     * @param {boolean} isNoteExists - Indicates whether other notes still exist.
+     */
+    delete(noteId, isNoteExists) {
+      document.querySelector(`[data-note="${noteId}"]`).remove();
+      if (!isNoteExists) $notePanel.innerHTML = emptyNoteTemplate;
     },
   },
 };

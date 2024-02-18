@@ -10,14 +10,18 @@ Note Taking Notekeeper is a simple and intuitive note-taking application that al
 
 ## Features
 
-- Create new notes with a title and content
-- Edit existing notes
-- Delete notes
+<!--
 - Organize notes into categories or folders
 - Search notes by title or content
 - Mark notes as favorites
 - Sort notes by date or title
-- Responsive design for mobile and desktop devices
+-->
+
+- Create, read, update, and delete notes
+- Responsive design for use on various devices
+- Light and dark modes for user preference
+- Dynamic greeting message based on the date
+- Simple and intuitive user interface
 
 ## Contributing
 

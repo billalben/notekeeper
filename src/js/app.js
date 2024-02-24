@@ -153,10 +153,12 @@ const renderExistedNote = function () {
 
   if (activeNotebookId) {
     const /** {Array<Object>} */ noteList = db.get.note(activeNotebookId);
-    
+
     // Display existing notes
     client.note.read(noteList);
   }
 };
 
 renderExistedNote();
+
+document.querySelector(".current-yr-cp").textContent = new Date().getFullYear();

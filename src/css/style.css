@@ -720,6 +720,9 @@ body {
   color: var(--on-surface-variant);
   transition: color var(--tr-duration-short) var(--tr-easing-linear);
 }
+.cp-info span {
+  display: inline-block;
+}
 
 /* ?=== #MAIN === */
 .main {
